@@ -15,7 +15,7 @@ Directed graph
 
 	0------>1
 	^       |
-	|       V
+	|       v
 	3<------2
 
 Nodes/Vertices: 
@@ -123,11 +123,13 @@ Degree in directed graph:
 	 2: [1, 1], 
 	 3: [1, 1]}
 
-	outdegrees = {i:sum(directedAdjMatrix[i]) for i in range(len(directedAdjMatrix))}
+	outdegrees = {i:sum(directedAdjMatrix[i])
+	              for i in range(len(directedAdjMatrix))}
 	outdegrees
 	{0: 1, 1: 1, 2: 1, 3: 1}
 
-	indegrees = {i:sum(directedAdjMatrix[j][i] for j in range(len(directedAdjMatrix))) for i in range(len(directedAdjMatrix))}
+	indegrees = {i:sum(directedAdjMatrix[j][i] for j in range(len(directedAdjMatrix)))
+	             for i in range(len(directedAdjMatrix))}
 	indegrees
 	{0: 1, 1: 1, 2: 1, 3: 1}
 
@@ -141,6 +143,7 @@ Degree in directed graph:
 						 
 Paths
 ----------------------------------------------
+
 
 
 

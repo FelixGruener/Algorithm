@@ -80,6 +80,8 @@ Degree in undirected graph:
 
 	# element in the dict will be:
 		node: degree
+	
+	# for adjacency list:
 
 	for link in undirectedAdjList:
 		if link[0] not in undirectedDegrees:
@@ -92,6 +94,12 @@ Degree in undirected graph:
 	 1: 2,
 	 2: 2,
 	 3: 2}
+
+	# problem : need to handle nodes with no links
+
+	for i in range(numNodes):
+		if i not in undirectedDegrees.keys():
+		undirectedDegrees[i] = 0
 
 	undirectedDegrees = {i:sum(undirectedAdjMatrix[i]) for i in range(len(undirectedAdjMatrix))}
 	ndirectedDegrees
@@ -134,12 +142,34 @@ Degree in directed graph:
 	{0: 1, 1: 1, 2: 1, 3: 1}
 
 	directedDegrees = {i:[sum(directedAdjMatrix[j][i] for j in range(len(directedAdjMatrix))),
-						  sum(directedAdjMatrix[i])] for i in range(len(directedAdjMatrix))}.
+						  sum(directedAdjMatrix[i])] for i in range(len(directedAdjMatrix))}
     directedDegrees
 	{0: [1, 1],
 	 1: [1, 1],
 	 2: [1, 1], 
 	 3: [1, 1]}
+
+	 # problem : need to handle nodes with no links
+	 # handle with numNodes parameter
+	 
+	 for i in range(numNodes):
+		if i not in directedDegrees.keys():
+			directedDegrees[i] = [0,0]
+
+Degree Distributions:
+----------------------------------------------
+
+Calculation degree distribution from undirected graph degrees
+
+	distributions = {}
+	for degree in degrees:
+		if degrees[degree] not in distributions:
+			distributions[degrees[degree]] = 1
+		else:
+			distributions[degrees[degree]] += 1
+	for count in distributions:
+		count[1] = count[1]/sum(distributions.values())
+	return distributions
 						 
 Paths
 ----------------------------------------------

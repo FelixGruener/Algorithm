@@ -1,15 +1,23 @@
-def Undirected_AdjList_Degrees(undirectedAdjList):
+def Undirected_AdjList_Degrees(undirectedAdjList, numNodes = None):
 	undirectedDegrees = {}
+	if numNodes == None:
+		numNodes = len(set(undirectedAdjList[i][0] for i in range(len(undirectedAdjList))))
 	for link in undirectedAdjList:
 		if link[0] not in undirectedDegrees:
 			undirectedDegrees[link[0]] = 1
 		else:
 			undirectedDegrees[link[0]] += 1
+	if numNodes != len(undirectedDegrees):
+		for i in range(numNodes):
+			if i not in undirectedDegrees.keys():
+				undirectedDegrees[i] = 0
 	return undirectedDegrees
 
 
-def Directed_AdjList_Degrees(directedAdjList):
+def Directed_AdjList_Degrees(directedAdjList, numNodes = None):
 	directedDegrees = {}
+	if numNodes == None:
+		numNodes = len(set(directedAdjList[i][j] for j in range(2) for i in range(len(directedAdjList))))
 	for link in directedAdjList:
 		if link[0] not in directedDegrees:
 			directedDegrees[link[0]] = [0,1]
@@ -18,7 +26,11 @@ def Directed_AdjList_Degrees(directedAdjList):
 		if link[1] not in directedDegrees:
 			directedDegrees[link[1]] = [1,0]
 		else:
-			directedDegrees[link[1]][0] += 1
+			directedDegrees[link[1]][0] += 1]
+	if numNodes != len(directedDegrees):
+		for i in range(numNodes):
+			if i not in directedDegrees.keys():
+				directedDegrees[i] = [0,0]
 	return directedDegrees
 
 
@@ -119,7 +131,7 @@ if __name__ == "__main__":
     for node in Graph2Degrees:
     	print Graph2Degrees[node]
     print Graph2Matrix[2][1]
-    
+
 
 
 

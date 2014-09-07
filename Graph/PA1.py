@@ -37,11 +37,11 @@ def make_complete_graph(num_Nodes = None):
 # Computing degree distributions
 
 def compute_in_degrees(digraph):
-	```
+	'''
 	return degrees for each nodes in a graph
 	input: a directed graph
 	output: dictionary with nodes as keys and degrees as values
-	```
+	'''
 	# initializing a empty dictionary to store degrees
 	degrees = dict()
 	# set degrees all to 0
@@ -55,11 +55,11 @@ def compute_in_degrees(digraph):
 	return degrees
 
 def in_degree_distribution(digraph):
-	```
+	'''
 	compute indegree distributions for a graph
 	input: a directed graph
 	output: dictionary with degrees as keys and count of nodes as values
-	```
+	'''
 	# initializing a empty dictionary to store degree distribution
 	distributions = dict()
 	degrees = compute_in_degrees(digraph)

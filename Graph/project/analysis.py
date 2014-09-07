@@ -124,7 +124,6 @@ def DPA(n,m):
 	'''
 	graph = make_complete_graph(m)
 	for i in range(m,n):
-		print i
 		indegrees = compute_in_degrees(graph)
 		totindeg = sum_indegrees(graph)
 		graph[i] = set()
@@ -178,8 +177,14 @@ if __name__ == "__main__":
 	For Question 4
 	'''
 	# the slow way:
-	g = DPA(27770,13)
-	
+	# g = DPA(27770,13)
+	# etc....
+	gprime = synthetic_digraph(27770,13,13)
+	normalized_gprime_indegree_distribution = degreeNormalization(gprime)
+	write_distributions(normalized_gprime_indegree_distribution, 'Gdistribution.csv')
+
+
+
 
 
 

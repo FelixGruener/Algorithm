@@ -13,22 +13,19 @@ EX_GRAPH2 = {0: set([1, 4, 5]), 1: set([2, 6]), 2: set([3, 7]),
 			 3: set([7]), 4: set([1]), 5: set([2]), 6: set([]),
 			 7: set([3]), 8: set([1, 2]), 9: set([0, 3, 4, 5, 6, 7])}
 
-def make_complete_graph(num_Nodes = None):
+def make_complete_graph(num_Nodes):
 	'''
 	return a full directed graph for given number of nodes
 	input: number of nodes
 	output: a directed graph with all possible edges
 	'''
-	if num_Nodes:
-		graph = {node:set() for node in range(num_Nodes)}
-		for node in graph:
-			for target in range(num_Nodes):
-				if node != target:
-					graph[node].add(target)
-		return graph
-	else:
-		return {}	
-
+	graph = {node:set() for node in range(num_Nodes)}
+	for node in graph:
+		for target in range(num_Nodes):
+			if node != target:
+				graph[node].add(target)
+	return graph
+	
 # make_complete_graph()
 # make_complete_graph(0)
 # make_complete_graph(1)

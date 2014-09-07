@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-```
+'''
 PA1 for algorithmic thinking course
-```
+'''
 
 # Representing directed graphs
 

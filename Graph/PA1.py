@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+```
+PA1 for algorithmic thinking course
+```
+
 # Representing directed graphs
 
 EX_GRAPH0 = {0: set([1, 2]), 1: set([]), 2: set([])}
@@ -7,12 +13,16 @@ EX_GRAPH2 = {0: set([1, 4, 5]), 1: set([2, 6]), 2: set([3, 7]),
 			 3: set([7]), 4: set([1]), 5: set([2]), 6: set([]),
 			 7: set([3]), 8: set([1, 2]), 9: set([0, 3, 4, 5, 6, 7])}
 
-def make_complete_graph(numNodes = None):
-	# return a full directed graph for given number of nodes
-	if numNodes:
-		graph = {node:set() for node in range(numNodes)}
+def make_complete_graph(num_Nodes = None):
+	'''
+	return a full directed graph for given number of nodes
+	input: number of nodes
+	output: a directed graph with all possible edges
+	'''
+	if num_Nodes:
+		graph = {node:set() for node in range(num_Nodes)}
 		for node in graph:
-			for target in range(numNodes):
+			for target in range(num_Nodes):
 				if node != target:
 					graph[node].add(target)
 		return graph
@@ -27,6 +37,11 @@ def make_complete_graph(numNodes = None):
 # Computing degree distributions
 
 def compute_in_degrees(digraph):
+	```
+	return degrees for each nodes in a graph
+	input: a directed graph
+	output: dictionary with nodes as keys and degrees as values
+	```
 	# initializing a empty dictionary to store degrees
 	degrees = dict()
 	# set degrees all to 0
@@ -34,12 +49,17 @@ def compute_in_degrees(digraph):
 		degrees[node] = 0
 	# calculating all in degrees
 	for node in degrees:
-		for sourceNode in digraph:
-			if node in digraph[sourceNode]:
+		for source_node in digraph:
+			if node in digraph[source_node]:
 				degrees[node] += 1
 	return degrees
 
 def in_degree_distribution(digraph):
+	```
+	compute indegree distributions for a graph
+	input: a directed graph
+	output: dictionary with degrees as keys and count of nodes as values
+	```
 	# initializing a empty dictionary to store degree distribution
 	distributions = dict()
 	degrees = compute_in_degrees(digraph)

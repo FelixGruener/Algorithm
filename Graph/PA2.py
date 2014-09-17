@@ -9,8 +9,10 @@ import random
 # Breadth-first search
 
 def bfs_visited(ugraph, start_node):
-	# input: undirected graph represented as adj list, a starting node
-	# output: a set containing the nodes connected to the starting node
+	'''
+	input: undirected graph represented as adj list, a starting node
+	output: a set containing the nodes connected to the starting node
+	'''
 	queue = [start_node]
 	visited = [start_node]
 	while queue != []:
@@ -27,8 +29,10 @@ def bfs_visited(ugraph, start_node):
 
 # Connected components
 def cc_visited(ugraph):
-	# input: undirected graph represented as adj list
-	# output: list of sets, each set represents a connected component
+	'''
+	input: undirected graph represented as adj list
+	output: list of sets, each set represents a connected component
+	'''
 	remaining_nodes = ugraph.keys()
 	connected_components = []
 	while remaining_nodes != []:
@@ -42,8 +46,10 @@ def cc_visited(ugraph):
 
 # Largest Connected component size
 def largest_cc_size(ugraph):
-	# input: undirected graph represented as adj list
-	# output: integer representing the size of the largest connected component
+	'''
+	input: undirected graph represented as adj list
+	output: integer representing the size of the largest connected component
+	'''
 	connected_components = cc_visited(ugraph)
 	length = [len(component) for component in connected_components]
 	if length == []:
@@ -55,8 +61,10 @@ def largest_cc_size(ugraph):
 # Graph resilience
 
 def compute_resilience(ugraph, attack_order):
-	# input: undirected graph represented as adj list, list of nodes to be removed from graph
-	# output, list of the size of the largest connected component in the remaining graph
+	'''
+	input: undirected graph represented as adj list, list of nodes to be removed from graph
+	output, list of the size of the largest connected component in the remaining graph
+	'''
 	remaining_largest_cc_size = [largest_cc_size(ugraph)]
 	for node in attack_order:
 		ugraph.pop(node)

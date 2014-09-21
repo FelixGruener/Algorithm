@@ -105,6 +105,72 @@ def upa_graph(total_number_of_nodes, initial_number_of_nodes, num_edges):
             ugraph[old_node].add(new_node)
     return ugraph
 
+def bfs_visited(ugraph, start_node):
+    '''
+    input: undirected graph represented as adj list, a starting node
+    output: a set containing the nodes connected to the starting node
+    '''
+    queue = [start_node]
+    visited = [start_node]
+    while queue != []:
+        node = queue.pop()
+        for neighbor in ugraph[node]:
+            if neighbor not in visited:
+                visited.append(neighbor)
+                queue.append(neighbor)
+    return set(visited)
+
+def cc_visited(ugraph):
+    '''
+    input: undirected graph represented as adj list
+    output: list of sets, each set represents a connected component
+    '''
+    remaining_nodes = ugraph.keys()
+    connected_components = []
+    while remaining_nodes != []:
+        node = remaining_nodes[random.randint(0,len(remaining_nodes)-1)]
+        component = bfs_visited(ugraph, node)
+        connected_components.append(component)
+        remaining_nodes = [remain for remain in remaining_nodes if remain not in component]
+    return connected_components
+
+def largest_cc_size(ugraph):
+    '''
+    input: undirected graph represented as adj list
+    output: integer representing the size of the largest connected component
+    '''
+    connected_components = cc_visited(ugraph)
+    length = [len(component) for component in connected_components]
+    if length == []:
+        return 0
+    return max([len(component) for component in connected_components])
+
+def compute_resilience(ugraph, attack_order):
+    '''
+    input: undirected graph represented as adj list, list of nodes to be removed from graph
+    output, list of the size of the largest connected component in the remaining graph
+    '''
+    remaining_largest_cc_size = [largest_cc_size(ugraph)]
+    for node in attack_order:
+        ugraph.pop(node)
+        for edge in ugraph.values():
+            edge.discard(node)
+        remaining_largest_cc_size.append(largest_cc_size(ugraph))
+    return remaining_largest_cc_size
+
+def random_order(graph):
+    return random.sample(graph.keys(),len(graph.keys()))
+
+def write_resilience(resi_graph, resi_ergraph, resi_upagraph, filename):
+    '''
+    function write the resiliences of grpahs to a csv file
+    '''
+    dis_file = open(filename, 'w')
+    for i in range(len(graph)):
+        dis_file.write(str(resi_graph[i])+","+str(resi_ergraph[i])+','+str(resi_upagraph[i])+'\n')
+    dis_file.close()
+
+
 if __name__ == "__main__":
     # load the computer network graph
     graph_file = 'alg_rf7.txt'
@@ -117,8 +183,13 @@ if __name__ == "__main__":
     # generating the er-graph
     ergraph = undirected_ER_graph_generator(number_of_original_nodes,probability)
     # generating a preferential attachment graph with similar number of edges
-    upagraph = upa_graph(number_of_original_nodes, 35, 2)
-    
+    upagraph = upa_graph(number_of_original_nodes, 2, 2)
+    attack_order = random_order(graph)
+    resi_graph = compute_resilience(graph, attack_order)
+    resi_ergraph = compute_resilience(ergraph, attack_order)
+    resi_upagraph = compute_resilience(upagraph, attack_order)
+    write_resilience(resi_graph,resi_ergraph,resi_upagraph, 'resiliences.csv')
+
 
 
 

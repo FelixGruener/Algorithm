@@ -8,8 +8,8 @@ number_of_nodes_removed <- as.vector(c(seq(0,1347),
                                        seq(0,1347)))
 resilience <- as.vector(rbind(resiliences,erresiliences,uparesiliences))
 graph <- as.vector(c(rep('computer_network',1348),
-             rep('er p=0.001716433045422606',1348),
-             rep('upa m =2',1348)))
+                     rep('er p=0.001716433045422606',1348),
+                     rep('upa m =2',1348)))
 
 df <- as.data.frame(cbind(number_of_nodes_removed,resilience,graph))
 

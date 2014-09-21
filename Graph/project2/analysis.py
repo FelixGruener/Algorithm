@@ -47,7 +47,7 @@ def targeted_order(ugraph):
         neighbors = new_graph[max_degree_node]
         new_graph.pop(max_degree_node)
         for neighbor in neighbors:
-            new_graph[neighbor].remove(max_degree_node)\
+            new_graph[neighbor].remove(max_degree_node)
         order.append(max_degree_node)
     return order
     
@@ -161,34 +161,41 @@ def compute_resilience(ugraph, attack_order):
 def random_order(graph):
     return random.sample(graph.keys(),len(graph.keys()))
 
-def write_resilience(resi_graph, resi_ergraph, resi_upagraph, filename):
+def write_resilience(resilience, filename):
     '''
     function write the resiliences of grpahs to a csv file
     '''
     dis_file = open(filename, 'w')
-    for i in range(len(graph)):
-        dis_file.write(str(resi_graph[i])+","+str(resi_ergraph[i])+','+str(resi_upagraph[i])+'\n')
+    for i in resilience:
+        dis_file.write(str(i)+'\n')
     dis_file.close()
 
 
 if __name__ == "__main__":
     # load the computer network graph
     graph_file = 'alg_rf7.txt'
-    graph = load_graph(graph_file)
+    cngraph = load_graph(graph_file)
     # calculating the number of nodes and edges in the computer network graph
-    number_of_original_nodes = len(graph)
-    number_of_original_edges = number_of_edges(graph)
+    number_of_original_nodes = len(cngraph)
+    number_of_original_edges = number_of_edges(cngraph)
     # calculating the probability to generate an er-graph with approximately the same number of edges
     probability = float(number_of_original_edges)/(number_of_original_nodes*(number_of_original_nodes-1))
     # generating the er-graph
     ergraph = undirected_ER_graph_generator(number_of_original_nodes,probability)
     # generating a preferential attachment graph with similar number of edges
     upagraph = upa_graph(number_of_original_nodes, 2, 2)
-    attack_order = random_order(graph)
+    # attack each network and generate the resiliences
+    attack_order = random_order(cngraph)
     resi_graph = compute_resilience(graph, attack_order)
-    resi_ergraph = compute_resilience(ergraph, attack_order)
-    resi_upagraph = compute_resilience(upagraph, attack_order)
-    write_resilience(resi_graph,resi_ergraph,resi_upagraph, 'resiliences.csv')
+    erattack_order = random_order(ergraph)
+    resi_ergraph = compute_resilience(ergraph, erattack_order)
+    upaattack_order = random_order(upagraph)
+    resi_upagraph = compute_resilience(upagraph, upaattack_order)
+    write_resilience(resi_graph,'graph_resiliences.txt')
+    write_resilience(resi_ergraph,'ergraph_resiliences.txt')
+    write_resilience(resi_upagraph,'upagraph_resiliences.txt')
+    # finish the ploting in R, plot1.R
+
 
 
 

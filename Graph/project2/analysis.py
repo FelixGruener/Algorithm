@@ -9,6 +9,7 @@ import time
 import math
 from UPATrial import UPATrial as upa
 
+
 def copy_graph(graph):
     """
     Make a copy of a graph
@@ -18,6 +19,7 @@ def copy_graph(graph):
         new_graph[node] = set(graph[node])
     return new_graph
 
+
 def delete_node(ugraph, node):
     """
     Delete a node from an undirected graph
@@ -26,7 +28,8 @@ def delete_node(ugraph, node):
     ugraph.pop(node)
     for neighbor in neighbors:
         ugraph[neighbor].remove(node)
-    
+
+
 def targeted_order(ugraph):
     """
     Compute a targeted attack order consisting
@@ -50,7 +53,8 @@ def targeted_order(ugraph):
             new_graph[neighbor].remove(max_degree_node)
         order.append(max_degree_node)
     return order
-    
+
+
 def load_graph(graph_file):
     """
     Function that loads a graph for a text representation of the graph
@@ -70,6 +74,7 @@ def load_graph(graph_file):
             answer_graph[node].add(int(neighbor))
     return answer_graph
 
+
 def undirected_ER_graph_generator(num_nodes, probability):
     '''
     generate a undirected ER graph
@@ -86,11 +91,13 @@ def undirected_ER_graph_generator(num_nodes, probability):
                     graph[target].add(node)
     return graph
 
+
 def number_of_edges(ugraph):
     num_of_edges = 0
     for edge in ugraph.values():
         num_of_edges += len(edge)
     return num_of_edges/2
+
 
 def upa_graph(total_number_of_nodes, initial_number_of_nodes, num_edges):
     """ 
@@ -104,6 +111,7 @@ def upa_graph(total_number_of_nodes, initial_number_of_nodes, num_edges):
         for old_node in new_edges:
             ugraph[old_node].add(new_node)
     return ugraph
+
 
 def bfs_visited(ugraph, start_node):
     '''
@@ -120,6 +128,7 @@ def bfs_visited(ugraph, start_node):
                 queue.append(neighbor)
     return set(visited)
 
+
 def cc_visited(ugraph):
     '''
     input: undirected graph represented as adj list
@@ -134,6 +143,7 @@ def cc_visited(ugraph):
         remaining_nodes = [remain for remain in remaining_nodes if remain not in component]
     return connected_components
 
+
 def largest_cc_size(ugraph):
     '''
     input: undirected graph represented as adj list
@@ -145,21 +155,28 @@ def largest_cc_size(ugraph):
         return 0
     return max([len(component) for component in connected_components])
 
+
 def compute_resilience(ugraph, attack_order):
     '''
     input: undirected graph represented as adj list, list of nodes to be removed from graph
     output, list of the size of the largest connected component in the remaining graph
     '''
-    remaining_largest_cc_size = [largest_cc_size(ugraph)]
+    new_graph = copy_graph(ugraph)
+    remaining_largest_cc_size = [largest_cc_size(new_graph)]
     for node in attack_order:
-        ugraph.pop(node)
-        for edge in ugraph.values():
+        new_graph.pop(node)
+        for edge in new_graph.values():
             edge.discard(node)
-        remaining_largest_cc_size.append(largest_cc_size(ugraph))
+        remaining_largest_cc_size.append(largest_cc_size(new_graph))
     return remaining_largest_cc_size
 
+
 def random_order(graph):
+    '''
+    generate random attack order
+    '''
     return random.sample(graph.keys(),len(graph.keys()))
+
 
 def write_resilience(resilience, filename):
     '''
@@ -171,8 +188,58 @@ def write_resilience(resilience, filename):
     dis_file.close()
 
 
+def test_resilient(resilience):
+    '''
+    test if the graph is resilient, that is:
+    if the size of the largest cc is within 25% of its original value,
+        after 20% nodes removed
+    '''
+    return resilience[int((len(resilience)-1)*0.2)]>((len(resilience)-1)-(len(resilience)-1)*0.25)
+
+
+def fast_targeted_order(ugraph):
+    '''
+    genrate a attack order which always attack the currently 
+        'richest' node in the graph for each step
+    '''
+    new_graph = copy_graph(ugraph)
+    degree_sets = [set() for i in range(len(new_graph))]
+    for k in range(len(new_graph)):
+        degree_sets[len(new_graph[k])].add(k)
+    L = []
+    for k in range(len(new_graph)):
+        iter = len(new_graph) - k - 1
+        while degree_sets[iter] != set():
+            u = degree_sets[iter].pop()
+            for neighbor in new_graph[u]:
+                d = len(new_graph[neighbor])
+                degree_sets[d].remove(neighbor)
+                degree_sets[d-1].add(neighbor)
+            L.append(u)
+            delete_node(new_graph, u)
+    return L
+
+
+def test_order_generator():
+    fast_time = []
+    slow_time = []
+    for i in range(10,1000,10):
+        new_graph = upa_graph(i, 5, 5)
+        new_graph2 = copy_graph(new_graph)
+        start = time.clock()
+        fast_targeted_order(new_graph)
+        run_time = time.clock() - start
+        fast_time.append(run_time)
+        start = time.clock()
+        targeted_order(new_graph2)
+        run_time = time.clock() - start
+        slow_time.append(run_time)
+    return slow_time, fast_time
+
+
 if __name__ == "__main__":
     # load the computer network graph
+    print "Question 1"
     graph_file = 'alg_rf7.txt'
     cngraph = load_graph(graph_file)
     # calculating the number of nodes and edges in the computer network graph
@@ -186,7 +253,7 @@ if __name__ == "__main__":
     upagraph = upa_graph(number_of_original_nodes, 2, 2)
     # attack each network and generate the resiliences
     attack_order = random_order(cngraph)
-    resi_graph = compute_resilience(graph, attack_order)
+    resi_graph = compute_resilience(cngraph, attack_order)
     erattack_order = random_order(ergraph)
     resi_ergraph = compute_resilience(ergraph, erattack_order)
     upaattack_order = random_order(upagraph)
@@ -195,6 +262,43 @@ if __name__ == "__main__":
     write_resilience(resi_ergraph,'ergraph_resiliences.txt')
     write_resilience(resi_upagraph,'upagraph_resiliences.txt')
     # finish the ploting in R, plot1.R
+
+    # question 2
+    print "Question 2"
+    print test_resilient(resi_graph)
+    print test_resilient(resi_ergraph)
+    print test_resilient(resi_upagraph)
+
+    # question 3
+    print "Question 3"
+    slow_time, fast_time = test_order_generator()
+    write_resilience(slow_time, 'time.txt')
+    write_resilience(fast_time, 'fast_time.txt')
+
+    # question 4
+    print "Question 4"
+    targeted_attack_order = targeted_order(cngraph)
+    targeted_resi_graph = compute_resilience(cngraph, targeted_attack_order)
+    targeted_erattack_order = targeted_order(ergraph)
+    targeted_resi_ergraph = compute_resilience(ergraph, targeted_erattack_order)
+    targeted_upaattack_order = targeted_order(upagraph)
+    targeted_resi_upagraph = compute_resilience(upagraph, targeted_upaattack_order)
+    write_resilience(targeted_resi_graph,'targeted_graph_resiliences.txt')
+    write_resilience(targeted_resi_ergraph,'targeted_ergraph_resiliences.txt')
+    write_resilience(targeted_resi_upagraph,'targeted_upagraph_resiliences.txt')
+
+    # question 5
+    print "Question 5"
+    print test_resilient(targeted_resi_graph)
+    print test_resilient(targeted_resi_ergraph)
+    print test_resilient(targeted_resi_upagraph)
+
+
+
+
+
+
+    
 
 
 

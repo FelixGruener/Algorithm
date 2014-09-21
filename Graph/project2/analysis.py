@@ -7,6 +7,7 @@ PAA 2 algorithmic thinking course
 import random
 import time
 import math
+from UPATrial import UPATrial as upa
 
 def copy_graph(graph):
     """
@@ -60,7 +61,6 @@ def load_graph(graph_file):
     graph_text = graph_file.read()
     graph_lines = graph_text.split('\n')
     graph_lines = graph_lines[:-1]
-    print "Loaded graph with", len(graph_lines), "nodes"
     answer_graph = {}
     for line in graph_lines:
         neighbors = line.split(' ')
@@ -86,6 +86,42 @@ def undirected_ER_graph_generator(num_nodes, probability):
                     graph[target].add(node)
     return graph
 
+def number_of_edges(ugraph):
+    num_of_edges = 0
+    for edge in ugraph.values():
+        num_of_edges += len(edge)
+    return num_of_edges/2
+
+def upa_graph(total_number_of_nodes, initial_number_of_nodes, num_edges):
+    """ 
+    generate an undirected preferencial attachment graph
+    """
+    ugraph = undirected_ER_graph_generator(initial_number_of_nodes, 1)
+    random_connect = upa(initial_number_of_nodes)
+    for new_node in range(initial_number_of_nodes, total_number_of_nodes):
+        new_edges = random_connect.run_trial(num_edges)
+        ugraph[new_node] = new_edges
+        for old_node in new_edges:
+            ugraph[old_node].add(new_node)
+    return ugraph
+
 if __name__ == "__main__":
+    # load the computer network graph
     graph_file = 'alg_rf7.txt'
     graph = load_graph(graph_file)
+    # calculating the number of nodes and edges in the computer network graph
+    number_of_original_nodes = len(graph)
+    number_of_original_edges = number_of_edges(graph)
+    # calculating the probability to generate an er-graph with approximately the same number of edges
+    probability = float(number_of_original_edges)/(number_of_original_nodes*(number_of_original_nodes-1))
+    # generating the er-graph
+    ergraph = undirected_ER_graph_generator(number_of_original_nodes,probability)
+    # generating a preferential attachment graph with similar number of edges
+    upagraph = upa_graph(number_of_original_nodes, 35, 2)
+    
+
+
+
+
+
+

@@ -1,3 +1,3 @@
-Algorithmic Thinking
+Graph -- Algorithmic Thinking
 =========
 https://class.coursera.org/algorithmicthink-001

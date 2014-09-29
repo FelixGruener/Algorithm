@@ -28,3 +28,15 @@ def merge(left_array,right_array,array):
   else:
     array[k:] = left_array[i:]
   return count
+
+def mystery(array,left_boundary,right_boundary):
+  if left_boundary > right_boundary:
+    return -1
+  middle = (left_boundary + right_boundary)/2
+  if array[middle] == middle:
+    return middle
+  else:
+    if array[middle] < middle:
+      return mystery(array, middle + 1, right_boundary)
+    else:
+      return mystery(array, left_boundary, middle - 1)

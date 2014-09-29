@@ -1,4 +1,9 @@
 def countInversion(array):
+  ```
+  count number of inversions in the array, and perform sorting with smallest first
+  input: array
+  output: number of inversions in the array, the original array will be sorted
+  ```
   n = len(array)
   if n == 1:
     return 0
@@ -11,6 +16,9 @@ def countInversion(array):
     return countLeft+countRight+countMerge
   
 def merge(left_array,right_array,array):
+  ```
+  merge function for countInversion(array)
+  ```
   count = 0
   p, q = len(left_array), len(right_array)
   i, j, k = 0, 0, 0
@@ -30,6 +38,9 @@ def merge(left_array,right_array,array):
   return count
 
 def mystery(array,left_boundary,right_boundary):
+  ```
+  return i if there exists an i such that array[i] == i, and -1 otherwise
+  ```
   if left_boundary > right_boundary:
     return -1
   middle = (left_boundary + right_boundary)/2

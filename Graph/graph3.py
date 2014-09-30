@@ -59,3 +59,21 @@ def euclidianDistance(p1, p2):
   output: euclidian distance between the two points
   '''
   return sum([(p1[i] - p2[i])**2 for i in range(len(p1))])**0.5
+
+
+def BFClosestPair(points):
+  '''
+  brute-force algorithm for solving the closest pair problem
+  input: a set p of more than 2 points
+  output: a tuple(d,i,j) where d is the smallest pairwise distance of points in p and i,j are the indices of two points
+  '''
+  smallestDistance = euclidianDistance(points[0],points[1])
+  smallestI = 0
+  smallestJ = 1
+  for i in range(len(points)-1):
+    for j in range(i+1, len(points)):
+      if euclidianDistance(points[i],points[j]) < smallestDistance:
+        smallestDistance = euclidianDistance(points[i],points[j])
+        smallestI = i
+        smallestJ = j
+  return (smallestDistance, smallestI, smallestJ)

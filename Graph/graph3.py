@@ -51,3 +51,11 @@ def mystery(array,left_boundary,right_boundary):
       return mystery(array, middle + 1, right_boundary)
     else:
       return mystery(array, left_boundary, middle - 1)
+
+
+def euclidianDistance(p1, p2):
+  '''
+  input: two points
+  output: euclidian distance between the two points
+  '''
+  return sum([(p1[i] - p2[i])**2 for i in range(len(p1))])**0.5

@@ -54,6 +54,19 @@ def mystery(array,left_boundary,right_boundary):
     else:
       return mystery(array, left_boundary, middle - 1)
 
+def load_data(data_file):
+  '''
+  load the data
+  '''
+  clusters = []
+  data = open(data_file)
+  data_text = data.read()
+  data_lines = data_text.split('\n')
+  for line in data_lines:
+    content = line.split(',')
+    clusters.append(Cluster(content[0],content[1],content[2],content[3],content[4]))
+  return clusters
+
     
 def hierarchicalClustering(points, k):
   '''
@@ -109,6 +122,7 @@ def SlowDCClosestPair(points):
     return 0
     
   
+
 #A = [5,4,3,2,1,0]
 #print countInversion(A)
 #print A

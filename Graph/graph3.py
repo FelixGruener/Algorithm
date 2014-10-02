@@ -1,3 +1,7 @@
+from alg_cluster import Cluster
+import math
+
+
 def countInversion(array):
   '''
   count number of inversions in the array, and perform sorting with smallest first
@@ -54,19 +58,6 @@ def mystery(array,left_boundary,right_boundary):
     else:
       return mystery(array, left_boundary, middle - 1)
 
-def load_data(data_file):
-  '''
-  load the data
-  '''
-  clusters = []
-  data = open(data_file)
-  data_text = data.read()
-  data_lines = data_text.split('\n')
-  for line in data_lines:
-    content = line.split(',')
-    clusters.append(Cluster(content[0],content[1],content[2],content[3],content[4]))
-  return clusters
-
     
 def hierarchicalClustering(points, k):
   '''
@@ -107,30 +98,69 @@ def BFClosestPair(points):
         smallestI = i
         smallestJ = j
   return (smallestDistance, smallestI, smallestJ)
-  
-
-def SlowDCClosestPair(points):
-  '''
-  a divide-and-conquer algorithm solving the closest pair problem
-  input: a set p of more than 2 points
-  output: a tuple(d,i,j) where d is the smallest pairwise distance of points in p and i,j are the indices of two points
-  '''
-  n = len(points)
-  if n <= 3:
-    return BFClosestPair(points)
-  else:
-    return 0
     
+
+def load_data(data_file):
+  '''
+  load the data
+  '''
+  clusters = []
+  data = open(data_file)
+  data_text = data.read()
+  data_lines = data_text.split('\n')
+  for line in data_lines:
+    content = line.split(',')
+    clusters.append(Cluster(int(content[0]),float(content[1]),float(content[2]),int(content[3]),float(content[4])))
+  return clusters
   
+def SlowDCClosestPair(cluster_list):
+  '''
+  Takes a list of Cluster objects and returns the set of all closest pairs where each pair is represented by
+  the tuple (dist, idx1, idx2) with idx1 < idx2 where 
+  dist is the distance between the closest pair cluster_list[idx1] and cluster_list[idx2]. 
+  This function should implement the brute-force closest pair method described in BFClosestPair from Homework 3 
+  with the two differences: 
+      a set of all closest pairs is returned consisting of all pairs that share the same minimal distance 
+      and the returned indices are ordered.
+  '''
+  smallest_distance = cluster_list[0].distance(cluster_list[1])
+  smallest_pairs = [(smallest_distance, cluster_list[0].fips_codes(), cluster_list[1].fips_codes())]
+  for i in range(len(cluster_list)-1):
+    for j in range(i+1,len(cluster_list)):
+      current_distance = cluster_list[i].distance(cluster_list[j])
+      if current_distance < smallest_distance:
+        smallest_distance = current_distance
+        smallest_pairs = [(smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes())]
+      elif current_distance == smallest_distance:
+        smallest_pairs.append((smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes()))
+  return  smallest_pairs
+      
 
-#A = [5,4,3,2,1,0]
-#print countInversion(A)
-#print A
+  
+  
+if __name__ == "__main__":
+  #A = [5,4,3,2,1,0]
+  #print countInversion(A)
+  #print A
 
-#A = [5,4,6,3,7,1]
-#print mystery(A, 0, 6)
+  #A = [5,4,6,3,7,1]
+  #print mystery(A, 0, 6)
 
-#points = {0:(1,1),1:(1,-0.8),2:(-0.5,-0.5),3:(-0.3,1.2)}
-#p1 = (1,2)
-#p2 = (2,3)
-#print euclidianDistance(p1,p2)
+  #points = {0:(1,1),1:(1,-0.8),2:(-0.5,-0.5),3:(-0.3,1.2)}
+  #p1 = (1,2)
+  #p2 = (2,3)
+  #print euclidianDistance(p1,p2)
+  file111 = 'unifiedCancerData_111.csv'
+  file290 = 'unifiedCancerData_290.csv'
+  file896 = 'unifiedCancerData_896.csv'
+  file3108 = 'unifiedCancerData_3108.csv'
+  cluster_list111 = load_data(file111)
+  cluster_list290 = load_data(file290)
+  cluster_list896 = load_data(file896)
+  cluster_list3108 = load_data(file3108)
+  print SlowDCClosestPair(cluster_list111)
+  print SlowDCClosestPair(cluster_list290)
+  print SlowDCClosestPair(cluster_list896)
+  print SlowDCClosestPair(cluster_list3108)
+  
+  

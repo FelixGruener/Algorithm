@@ -100,6 +100,8 @@ def BFClosestPair(points):
   return (smallestDistance, smallestI, smallestJ)
     
 
+# load the data for PA3
+  
 def load_data(data_file):
   '''
   load the data
@@ -112,8 +114,10 @@ def load_data(data_file):
     content = line.split(',')
     clusters.append(Cluster(int(content[0]),float(content[1]),float(content[2]),int(content[3]),float(content[4])))
   return clusters
-  
-def SlowDCClosestPair(cluster_list):
+
+# slow
+
+def slow_closest_pair(cluster_list):
   '''
   Takes a list of Cluster objects and returns the set of all closest pairs where each pair is represented by
   the tuple (dist, idx1, idx2) with idx1 < idx2 where 
@@ -124,18 +128,27 @@ def SlowDCClosestPair(cluster_list):
       and the returned indices are ordered.
   '''
   smallest_distance = cluster_list[0].distance(cluster_list[1])
-  smallest_pairs = [(smallest_distance, cluster_list[0].fips_codes(), cluster_list[1].fips_codes())]
+  smallest_pairs = {(smallest_distance, cluster_list[0].fips_codes(), cluster_list[1].fips_codes())}
   for i in range(len(cluster_list)-1):
     for j in range(i+1,len(cluster_list)):
       current_distance = cluster_list[i].distance(cluster_list[j])
       if current_distance < smallest_distance:
         smallest_distance = current_distance
-        smallest_pairs = [(smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes())]
+        smallest_pairs = {(smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes())}
       elif current_distance == smallest_distance:
-        smallest_pairs.append((smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes()))
+        smallest_pairs.add((smallest_distance, cluster_list[i].fips_codes(), cluster_list[j].fips_codes()))
   return  smallest_pairs
       
-
+def fast_closest_pair(cluster_list):
+  '''
+  Takes a list of Cluster objects and and returns a closest pair where the pair is represented by
+  the tuple (dist, idx1, idx2) with idx1 < idx2 where
+  dist is the distance between the closest pair cluster_list[idx1] and cluster_list[idx2]. 
+  This function should implement the fast divide-and-conquer closest pair method described in Homework 3
+  with the exception that the returned indices are ordered. 
+  Note this method should compute horizontal and vertical orderings of the clusters 
+      and call a recursive helper function that will do the majority of the work.
+  '''
   
   
 if __name__ == "__main__":
@@ -158,9 +171,9 @@ if __name__ == "__main__":
   cluster_list290 = load_data(file290)
   cluster_list896 = load_data(file896)
   cluster_list3108 = load_data(file3108)
-  print SlowDCClosestPair(cluster_list111)
-  print SlowDCClosestPair(cluster_list290)
-  print SlowDCClosestPair(cluster_list896)
-  print SlowDCClosestPair(cluster_list3108)
+  print slow_closest_pair(cluster_list111)
+  print slow_closest_pair(cluster_list290)
+  print slow_closest_pair(cluster_list896)
+  print slow_closest_pair(cluster_list3108)
   
   

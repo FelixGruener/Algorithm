@@ -152,7 +152,7 @@ def fast_closest_pair(cluster_list, horizontal_order, vertical_order):
   n = len(horizontal_order)
   if n <= 3:
     q = [cluster_list[idx] for idx in horizontal_order]
-    return slow_closest_pair(q)
+    return [slow_closest_pair(q).pop()]
   else:
     # the nunber of points in each half
     m = (n+1)/2

@@ -218,15 +218,20 @@ if __name__ == "__main__":
   file896 = 'unifiedCancerData_896.csv'
   file3108 = 'unifiedCancerData_3108.csv'
   cluster_list111 = load_data(file111)
-  cluster_list290 = load_data(file290)
-  cluster_list896 = load_data(file896)
-  cluster_list3108 = load_data(file3108)
-  print slow_closest_pair(cluster_list111)
-  print slow_closest_pair(cluster_list290)
-  print slow_closest_pair(cluster_list896)
-  print slow_closest_pair(cluster_list3108)
-  horizontal_order = horiz_order(cluster_list111)
-  vertical_order = vert_order(cluster_list111)
-  print fast_closest_pair(cluster_list111, horizontal_order, vertical_order)
+  #cluster_list290 = load_data(file290)
+  #cluster_list896 = load_data(file896)
+  #cluster_list3108 = load_data(file3108)
+  #print slow_closest_pair(cluster_list111)
+  #print slow_closest_pair(cluster_list290)
+  #print slow_closest_pair(cluster_list896)
+  #print slow_closest_pair(cluster_list3108)
+  #horizontal_order = horiz_order(cluster_list111)
+  #vertical_order = vert_order(cluster_list111)
+  #print fast_closest_pair(cluster_list111, horizontal_order, vertical_order)
+  c= cluster_list111[:36]
+  h = horiz_order(c)
+  v = horiz_order(c)
+  print slow_closest_pair(c)
+  print fast_closest_pair(c,h,v)
   
   

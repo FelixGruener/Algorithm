@@ -158,8 +158,8 @@ def fast_closest_pair(cluster_list, horizontal_order, vertical_order):
     m = (n+1)/2
     # the horizontal coordinate of the vertical dividing line
     mid = float(cluster_list[horizontal_order[m-1]].horiz_center() + cluster_list[horizontal_order[m]].horiz_center())/2
-    horizontal_order_left = horizontal_order[:m-1]
-    horizontal_order_right = horizontal_order[m-1:]
+    horizontal_order_left = horizontal_order[:m]
+    horizontal_order_right = horizontal_order[m:]
     vertical_order_left = [idx for idx in vertical_order if idx in horizontal_order_left]
     vertical_order_right = [idx for idx in vertical_order if idx in horizontal_order_right]
     smallest_left = fast_closest_pair(cluster_list, horizontal_order_left, vertical_order_left)
@@ -175,7 +175,7 @@ def fast_closest_pair(cluster_list, horizontal_order, vertical_order):
         temp = [d,(cluster_list[S[u]].distance(cluster_list[S[v]]),S[u],S[v])]
         temp.sort()
         d = temp[0]
-    return set(d)
+    return d
   
 
   
@@ -225,4 +225,8 @@ if __name__ == "__main__":
   print slow_closest_pair(cluster_list290)
   print slow_closest_pair(cluster_list896)
   print slow_closest_pair(cluster_list3108)
+  horizontal_order = horiz_order(cluster_list111)
+  vertical_order = vert_order(cluster_list111)
+  print fast_closest_pair(cluster_list111, horizontal_order, vertical_order)
+  
   

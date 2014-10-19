@@ -1,3 +1,8 @@
+'''
+PA4
+'''
+
+
 def build_scoring_matrix(alphabet='AGCT',
                          diag_score=10, off_diag_score=4, dash_score=6):
     '''

@@ -31,4 +31,15 @@ public class QuickFindUF{
 		for (int i = 0; i < id.length; i++)
 			if (id[i] == pid) id[i] = qid;
 	}
+
+	/*
+	  print out the array 
+	*/
+	public void print(){
+		System.out.println("The underline array is: ");
+		for (int i = 0; i < id.length; i++){
+			System.out.print(id[i]);
+		}
+		System.out.println();
+	}
 }

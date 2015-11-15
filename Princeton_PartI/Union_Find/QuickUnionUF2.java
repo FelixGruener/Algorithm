@@ -11,10 +11,12 @@ public class QuickUnionUF2{
 	private int[] sz;
 
 	/*Constructor*/
-	public QuickUnionUF(int N){
+	public QuickUnionUF2(int N){
 		id = new int[N];
-		for (int i = 0; i < N; i++)
+		sz = new int[N];
+		for (int i = 0; i < N; i++){
 			id[i] = i;
+		}
 	}
 
 	/*
@@ -53,11 +55,21 @@ public class QuickUnionUF2{
 			return;
 		if (sz[i] < sz[j]){
 			id[i] = j;
-			sz[j] += size[i];
+			sz[j] += sz[i];
 		}
 		else{
 			id[j] = i;
-			sz[i] += size[j];
+			sz[i] += sz[j];
 		}
+	}
+	/*
+	  print out the array 
+	*/
+	public void print(){
+		System.out.println("The underline array is: ");
+		for (int i = 0; i < id.length; i++){
+			System.out.print(id[i]);
+		}
+		System.out.println();
 	}
 }

@@ -40,6 +40,17 @@ public class QuickUnionUF{
 	public void union(int p, int q){
 		int i = root(p);
 		int j = root(q);
-		id[i] = j
+		id[i] = j;
+	}
+
+	/*
+	  print out the array 
+	*/
+	public void print(){
+		System.out.println("The underline array is: ");
+		for (int i = 0; i < id.length; i++){
+			System.out.print(id[i]);
+		}
+		System.out.println();
 	}
 }
